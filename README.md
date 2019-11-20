@@ -624,7 +624,7 @@ An overview of all the available API endpoints are listed as follows:
             "ctime": 1571971998000,
             "deal_price": "9.74425000",
             "id": 6224,
-            "type": "卖出"
+            "type": "SELL"
         }
     ],
     "order_info": {
@@ -638,11 +638,11 @@ An overview of all the available API endpoints are listed as follows:
         "countCoin": "USDT",
         "source": 3,
         "type": 1,
-        "side_msg": "卖出",
+        "side_msg": "SELL",
         "volume": "0.00100000",
         "price": "8000.00000000",
         "source_msg": "API",
-        "status_msg": "完全成交",
+        "status_msg": "Completely Filled",
         "deal_volume": "0.00100000",
         "fee_coin": "USDT",
         "remain_volume": "0.00000000",
@@ -656,7 +656,7 @@ An overview of all the available API endpoints are listed as follows:
                 "ctime": 1571971998000,
                 "deal_price": "9.74425000",
                 "id": 6224,
-                "type": "卖出"
+                "type": "SELL"
             }
         ],
         "status": 2
@@ -756,11 +756,11 @@ An overview of all the available API endpoints are listed as follows:
             "countCoin": "USDT",
             "source": 3,
             "type": 1,
-            "side_msg": "买入",
+            "side_msg": "BUY",
             "volume": "0.00100000",
             "price": "9000.00000000",
             "source_msg": "API",
-            "status_msg": "未成交",
+            "status_msg": "Unsettled",
             "deal_volume": "0.00000000",
             "fee_coin": "BTC",
             "id": 8139,
@@ -785,11 +785,11 @@ An overview of all the available API endpoints are listed as follows:
             "countCoin": "USDT",
             "source": 3,
             "type": 1,
-            "side_msg": "买入",
+            "side_msg": "BUY",
             "volume": "0.00100000",
             "price": "9000.00000000",
             "source_msg": "API",
-            "status_msg": "未成交",
+            "status_msg": "Unsettled",
             "deal_volume": "0.00000000",
             "fee_coin": "BTC",
             "id": 8081,
@@ -849,11 +849,11 @@ An overview of all the available API endpoints are listed as follows:
             "countCoin": "USDT",
             "source": 1,
             "type": 1,
-            "side_msg": "买入",
+            "side_msg": "BUY",
             "volume": "0.00100000",
             "price": "9744.47000000",
             "source_msg": "WEB",
-            "status_msg": "完全成交",
+            "status_msg": "Completely Filled",
             "deal_volume": "0.00100000",
             "fee_coin": "BTC",
             "id": 8145,
@@ -871,11 +871,11 @@ An overview of all the available API endpoints are listed as follows:
             "countCoin": "USDT",
             "source": 3,
             "type": 1,
-            "side_msg": "卖出",
+            "side_msg": "SELL",
             "volume": "0.00100000",
             "price": "8000.00000000",
             "source_msg": "API",
-            "status_msg": "完全成交",
+            "status_msg": "Completely Filled",
             "deal_volume": "0.00100000",
             "fee_coin": "USDT",
             "id": 8140,
@@ -934,7 +934,7 @@ An overview of all the available API endpoints are listed as follows:
             "ctime": 1572235997000,
             "deal_price": "9.74",
             "id": 6227,
-            "type": "买入",
+            "type": "BUY",
             "bid_id": 8145,
             "bid_user_id": 10106
         },
@@ -948,7 +948,7 @@ An overview of all the available API endpoints are listed as follows:
             "ctime": 1571971998000,
             "deal_price": "9.74",
             "id": 6224,
-            "type": "卖出",
+            "type": "SELL",
             "ask_id": 8140
         }
     ]
