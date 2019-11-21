@@ -11,7 +11,7 @@
     - [Market Symbols](#symbol)
 - [API Reference](#b5)
   - [Market API](#market-api) 
-    -   [List all available markets](#common-symbols)
+    -   [List all available market symbols](#common-symbols)
     -   [Get tickers in all available markets](#get-allticker)
     -   [Get ticker for a particular market](#get-ticker)
     -   [Get k-line data over a specified period](#get-records)
@@ -19,13 +19,13 @@
     -   [Get latest execution price for all markets](#api-market)
     -   [Get the order book for a particular market](#api-market-dept)
   - [User API](#user-api) 
-    -   [List user's all account balances](#user-account)
+    -   [List all account balance of user](#user-account)
     -   [Create an order](#create-order)
     -   [Get order detail](#order-info)
     -   [Cancel an order](#cancel-order)
     -   [Cancel all orders in a particular market](#cancel-order-all)
-    -   [List all orders in a particular market](#new-order)
-    -   [List all orders in a particular market v2](#all-order)
+    -   [List all open orders in a particular market](#new-order)
+    -   [List all orders in a particular market](#all-order)
     -   [List all executed orders](#all-trade)
   - [WebSocket API](#ws-api)
     -   [Request: current tickers in all available markets](#req-ticker)
@@ -53,11 +53,11 @@ The root URL for API access: https://api.crypto.com
 
 The root URL for WebSocket access https://ws.crypto.com
 
-All requests must be made via HTTPS protocol. For `POST`requests, the `Content-Type` in the request must be `application/x-www-form-urlencoded`.
+All requests must be made via HTTPS protocol. For `POST` requests, the `Content-Type` in the request must be `application/x-www-form-urlencoded`.
 
 ## <span id="generate-key">Generate the API Key</span>
 
-Before sending making any requests, you'll need to generate a new API key. This can be done via the web interface in【User Center】-【API】. After generating the key, there are two things you need to record:
+Before sending any requests, you'll need to generate a new API key. This can be done via the web interface in【User Center】-【API】. After generating the key, there are two things you need to record:
 
 - API Key
 - Secret Key
@@ -96,13 +96,13 @@ sign=sha256("api_key" + "mZhlB7z8dDXXdL74uwoIoqAtPQSpY6Mk" + "time" + "157378976
 - 400 Bad Request – Invalid request format
 - 401 Unauthorized – Invalid API Key
 - 403 Forbidden – You do not have access to the requested resource
-- 404 Not Found
+- 404 Not Found - Server could not find the API endpoint
 - 429 Too Many Requests - A rate limit has been exceeded. The following table shows rate limits:
 
     | API Group | Limits | Group by |
     |----------|--------|----------|
-    | Market APIs | up to 6 requests for 2s | IP |
-    | User APIs | up to 6 requests for 2s | `user_id` |
+    | Market APIs | up to 10 requests per second | IP |
+    | User APIs | up to 10 requests per second | `user_id` |
 
 - 499 Request rejected due to an input validation error
 - 500 Internal Server Error
@@ -144,23 +144,23 @@ Users are recommended to use `WebSocket API` instead of `Market API` because the
 
 An overview of all the available API endpoints are listed as follows:
 
-| Group | Path | Method | Allowed Parameters | Description |
+| Group | Path | Method | Allowed Parameters | Action |
 |-------|------|--------|--------------------|-------------|
-| Market | `/v1/symbols` | `GET` | (null) | Lists all available market symbols|
-| Market | `/v1/tickers` | `GET` | (null) | Gets tickers in all available markets |
-| Market | `/v1/ticker` | `GET` | `symbol` | Gets ticker for a particular market | 
+| Market | `/v1/symbols` | `GET` | (null) | List all available market symbols|
+| Market | `/v1/tickers` | `GET` | (null) | Get tickers in all available markets |
+| Market | `/v1/ticker` | `GET` | `symbol` | Get ticker for a particular market | 
 | Market | `/v1/klines` | `GET` | `symbol`, `period` | Get k-line data over a specified period |
 | Market | `/v1/trades` | `GET` | `symbol` | Get last 200 trades in a specified market |
 | Market | `/v1/ticker/price` | `GET` | (null) | Get latest execution price for all markets |
 | Market | `/v1/depth` | `GET` | `symbol`, `type` | Get the order book for a particular market |
-| User | `/v1/account` | `POST` | +3 | List user's all account balances |
-| User | `/v1/orders/create` | `POST` | `side`, `type`, `volume`, `price`, `fee_is_user_exchange_coin` +3 | Creates an order |
+| User | `/v1/account` | `POST` | +3 | List all account balance of user |
+| User | `/v1/orders/create` | `POST` | `side`, `type`, `volume`, `price`, `fee_is_user_exchange_coin` +3 | Create an order |
 | User | `/v1/orders/show` | `POST` | `order_id` +3 | Get order detail |
-| User | `/v1/orders/cancel` | `POST` | `order_id` +3 | Cancels an order |
-| User | `/v1/orders/cancel_all` | `POST` | `symbol` +3 | Cancels all orders in a particular market |
-| User | `/v1/open_orders` | `POST` | `symbol`, `pageSize`, `page` +3 | Lists all orders in a particular market |
-| User | `/v1/all_orders` | `POST` | `symbol`, `pageSize`, `page`, `startDate`, `endDate` +3 | Lists all orders in a particular market |
-| User | `/v1/all_trades` | `POST` | `symbol`, `pageSize`, `page`, `startDate`, `endDate`, `sort` +3 | Lists all executed orders |
+| User | `/v1/orders/cancel` | `POST` | `order_id` +3 | Cancel an order |
+| User | `/v1/orders/cancel_all` | `POST` | `symbol` +3 | Cancel all orders in a particular market |
+| User | `/v1/open_orders` | `POST` | `symbol`, `pageSize`, `page` +3 | List all open orders in a particular market |
+| User | `/v1/all_orders` | `POST` | `symbol`, `pageSize`, `page`, `startDate`, `endDate` +3 | List all orders in a particular market |
+| User | `/v1/all_trades` | `POST` | `symbol`, `pageSize`, `page`, `startDate`, `endDate`, `sort` +3 | List all executed orders |
 
 **Note**: For User API calls, there are three more parameters in each requests -- `api_key`, `time` and `sign`.
 
@@ -178,12 +178,12 @@ An overview of all the available API endpoints are listed as follows:
 
 ##  <span id="market-api">Market API</span>
 
-### <span id="common-symbols">List all available markets symbols</span>
+### <span id="common-symbols">List all available market symbols</span>
 
 
 1. Endpoint URL: `/v1/symbols`
 2. Method: GET
-3. Description: Queries all transaction pairs and precision supported by the system.
+3. Description: queries all transaction pairs and precision supported by the system.
 4. This is a public interface, request signature is not needed
 5. Request Parameter: no parameter is allowed
 6. Response Content-Type: `application/json`
@@ -229,7 +229,7 @@ An overview of all the available API endpoints are listed as follows:
 ###  <span id="get-allticker">Get tickers in all available markets</span>
 1. Endpoint URL: `/v1/tickers`
 2. Method: `GET`
-3. Description: Gets all trading pairs quotes on the market.
+3. Description: gets all trading pairs quotes on the market.
 4. This is a public interface, request signature is not needed
 5. Request Parameter: no parameter is allowed
 6. Response Content-Type: `application/json`
@@ -284,7 +284,7 @@ An overview of all the available API endpoints are listed as follows:
 
 1. Endpoint URL: `/v1/ticker`
 2. Method: `GET`
-3. Description: Gets the current market quotes.
+3. Description: gets the current market quotes.
 4. This is a public interface, request signature is not needed
 5. Request Parameters: see below
 
@@ -320,7 +320,7 @@ An overview of all the available API endpoints are listed as follows:
 
 1. Endpoint URL: `/v1/klines`
 2. Method: `GET`
-3. Description: Gets K-line data.
+3. Description: gets K-line data.
 4. This is a public interface, request signature is not needed
 5. Request Parameter: no parameter is allowed
 
@@ -374,7 +374,7 @@ An overview of all the available API endpoints are listed as follows:
 
 1. Endpoint URL: `/v1/trades`
 2. Method: `GET`
-3. Description: Obtains market transaction records.
+3. Description: obtains market transaction records.
 4. This is a public interface, request signature is not needed
 5. Request Parameter: see below
 
@@ -435,7 +435,7 @@ An overview of all the available API endpoints are listed as follows:
 
 1. Endpoint URL: `/v1/ticker/price`
 2. Method: `GET`
-3. Description: Gets the latest transaction price of each pair of currencies.
+3. Description: gets the latest transaction price of each pair of currencies.
 4. This is a public interface, request signature is not needed
 5. Request Parameter: no parameter is allowed
 6. Response Content-Type: `application/json`
@@ -454,7 +454,7 @@ An overview of all the available API endpoints are listed as follows:
 
 1. Endpoint URL: `/v1/depth`
 2. Method: `GET`
-3. Search the depth of buying and selling.
+3. Description: gets the list of orders from buyers and sellers for the market
 4. This is a public interface, request signature is not needed
 5. Request Parameter: see below
 
@@ -504,11 +504,11 @@ An overview of all the available API endpoints are listed as follows:
 ---
 ##  <span id="user-api">User API</span>
 
-### <span id="user-account">List user's all account balances</span>
+### <span id="user-account">List all account balance of user</span>
 
 1. Endpoint URL: `/v1/account`
 2. Method: `POST`
-3. Description: Balance of the assets.
+3. Description: display the balance of user’s assets across all accounts
 4. Request Parameter: see below
 
 |POST Parameter|	Required|	Description|
@@ -558,7 +558,7 @@ An overview of all the available API endpoints are listed as follows:
 
 1. Endpoint URL: `/v1/orders/create`
 2. Method: `POST`
-3. Description: Create an order.
+3. Description: creates a buy or sell order on exchange
 4. Request Parameter: see below
 
 |POST parameter|	Required|	Description|
@@ -593,7 +593,7 @@ An overview of all the available API endpoints are listed as follows:
 
 1. Endpoint URL: `/v1/orders/show`
 2. Method: `POST`
-3. Description: Obtain order details.
+3. Description: obtain order details.
 4. Request Parameter: see below
 
 |POST Parameter|	Required|	Description|
@@ -670,7 +670,7 @@ An overview of all the available API endpoints are listed as follows:
 
 1. Endpoint URL: `/v1/orders/cancel`
 2. Method: `POST`
-3. Description: Cancellation of the order.
+3. Description: cancellation of the order.
 4. Request Parameter: see below
 
 |POST Parameter|	Required|	Description|
@@ -695,7 +695,7 @@ An overview of all the available API endpoints are listed as follows:
 
 1. Endpoint URL: `/v1/orders/cancel_all`
 2. Method: `POST`
-3. Description: Cancellation of all orders according to currency pair (Up to 2,000 cancellations).
+3. Description: cancellation of all orders according to currency pair (Up to 2,000 cancellations).
 4. Request Parameter: see below
 
 |POST Parameter|	Required|	Description|
@@ -715,12 +715,12 @@ An overview of all the available API endpoints are listed as follows:
 |data|	(null) |
 
 ---
-### <span id="new-order">List all orders in a particular market</span>
+### <span id="new-order">List all open orders in a particular market</span>
 
 
 1. Endpoint URL: `/v1/open_orders`
 2. Method: `POST`
-3. Description: Get the current orders (Including uncompleted and ongoing commissions)
+3. Description: get the current pending orders
 4. Request Parameter: see below
 
 |POST Parameter|	Required|	Description|
@@ -801,17 +801,13 @@ An overview of all the available API endpoints are listed as follows:
 }
 ```
 
-* Old interface /api/new_order (It still works, but not recommended.)
-
-* v2 version change: Remove the tradeList transaction record from the result to improve efficiency; if you need transaction information for a single order, you can still use `/v1/orders/show` to get it.
-
 
 ---
 ### <span id="all-order">List all orders in a particular market</span>
 
 1. Endpoint URL: `/v1/all_orders`
 2. Method: `POST`
-3. Description: Acquire full list of orders. startDate, endDate interval cannot exceed ten minutes. startDate, endDate default to first 10 minutes.
+3. Description: acquire full list of orders (including executed, pending, cancelled orders)
 
 4. Request Parameter: see below
 
@@ -887,17 +883,13 @@ An overview of all the available API endpoints are listed as follows:
 }
 ```
 
-* Old interface `/api/all_order` (It is still works, but not recommended.)
-
-* v2 version change: Remove the tradeList transaction record from the result to improve efficiency;If you need transaction information for a single order, you can still use `/v1/orders/show` to get it.
-
 
 ---
 ### <span id="all-trade">List all executed orders</span>
 
 1. Endpoint URL: `/v1/all_trades`
 2. Method: `POST`
-3. Description: Get all transaction records.
+3. Description: get all records of executed orders
 4. Request Parameter: see below
 
 |POST Parameter|	Required|	Description|
@@ -1234,7 +1226,7 @@ An overview of all the available API endpoints are listed as follows:
 }
 ```
 
-* **Note**: The first successful subscription will immediately return a full amount of data and the server will regularly push a full amount of data to the front-end to avoid problems.
+* **Note**: The first successful subscription will immediately return the full amount of data and the server will regularly push the full amount of data to the front-end to avoid problems.
 
 * Full quantity: the front end directly replaces the original disk outlet
 ```js
