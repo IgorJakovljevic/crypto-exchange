@@ -53,7 +53,7 @@ The root URL for API access: https://api.crypto.com
 
 The root URL for WebSocket access https://ws.crypto.com
 
-All requests must be made via HTTPS protocol. For `POST` requests, the `Content-Type` in the request must be `application/x-www-form-urlencoded`.
+All requests must be made via HTTPS protocol. For `POST` and `DELETE` requests, the `Content-Type` in the request must be `application/x-www-form-urlencoded`.
 
 ## <span id="generate-key">Generate the API Key</span>
 
@@ -106,6 +106,7 @@ sign=sha256("api_key" + "mZhlB7z8dDXXdL74uwoIoqAtPQSpY6Mk" + "time" + "157378976
 
 - 499 Request rejected due to an input validation error
 - 500 Internal Server Error
+- 503 Server Busy - The server is temporarily too busy, please retry later
 
 Unless otherwise specified, all responses are a JSON object with the following fields. The user can observe the `code` and `msg` fields for more detailed error information.
 
@@ -154,13 +155,13 @@ An overview of all the available API endpoints are listed as follows:
 | Market | `/v1/ticker/price` | `GET` | (null) | Get latest execution price for all markets |
 | Market | `/v1/depth` | `GET` | `symbol`, `type` | Get the order book for a particular market |
 | User | `/v1/account` | `POST` | +3 | List all account balance of user |
-| User | `/v1/orders/create` | `POST` | `side`, `type`, `volume`, `price`, `fee_is_user_exchange_coin` +3 | Create an order |
-| User | `/v1/orders/show` | `POST` | `order_id` +3 | Get order detail |
-| User | `/v1/orders/cancel` | `POST` | `order_id` +3 | Cancel an order |
-| User | `/v1/orders/cancel_all` | `POST` | `symbol` +3 | Cancel all orders in a particular market |
-| User | `/v1/open_orders` | `POST` | `symbol`, `pageSize`, `page` +3 | List all open orders in a particular market |
-| User | `/v1/all_orders` | `POST` | `symbol`, `pageSize`, `page`, `startDate`, `endDate` +3 | List all orders in a particular market |
-| User | `/v1/all_trades` | `POST` | `symbol`, `pageSize`, `page`, `startDate`, `endDate`, `sort` +3 | List all executed orders |
+| User | `/v1/order` | `POST` | `side`, `type`, `volume`, `price`, `fee_is_user_exchange_coin` +3 | Create an order |
+| User | `/v1/showOrder` | `POST` | `order_id` +3 | Get order detail |
+| User | `/v1/order` | `DELETE` | `order_id` +3 | Cancel an order |
+| User | `/v1/cancelAllOrders` | `POST` | `symbol` +3 | Cancel all orders in a particular market |
+| User | `/v1/openOrders` | `POST` | `symbol`, `pageSize`, `page` +3 | List all open orders in a particular market |
+| User | `/v1/allOrders` | `POST` | `symbol`, `pageSize`, `page`, `startDate`, `endDate` +3 | List all orders in a particular market |
+| User | `/v1/myTrades` | `POST` | `symbol`, `pageSize`, `page`, `startDate`, `endDate`, `sort` +3 | List all executed orders |
 
 **Note**: For User API calls, there are three more parameters in each requests -- `api_key`, `time` and `sign`.
 
@@ -556,7 +557,7 @@ An overview of all the available API endpoints are listed as follows:
 ### <span id="create-order">Create an order</span>
 
 
-1. Endpoint URL: `/v1/orders/create`
+1. Endpoint URL: `/v1/order`
 2. Method: `POST`
 3. Description: creates a buy or sell order on exchange
 4. Request Parameter: see below
@@ -591,7 +592,7 @@ An overview of all the available API endpoints are listed as follows:
 ---
 ###  <span id="order-info">Get order detail</span>
 
-1. Endpoint URL: `/v1/orders/show`
+1. Endpoint URL: `/v1/showOrder`
 2. Method: `POST`
 3. Description: obtain order details.
 4. Request Parameter: see below
@@ -668,12 +669,12 @@ An overview of all the available API endpoints are listed as follows:
 ---
 ###  <span id="cancel-order">Cancel an order</span>
 
-1. Endpoint URL: `/v1/orders/cancel`
-2. Method: `POST`
+1. Endpoint URL: `/v1/order`
+2. Method: `DELETE`
 3. Description: cancellation of the order.
 4. Request Parameter: see below
 
-|POST Parameter|	Required|	Description|
+|DELETE body Parameter|	Required|	Description|
 |------------|--------|-----------------------------|
 |order_id|	Yes|	OrderID|
 |symbol|	Yes|	Market symbol "ethbtc". See below for details|
@@ -693,7 +694,7 @@ An overview of all the available API endpoints are listed as follows:
 ---
 ###  <span id="cancel-order-all">Cancel all orders in a particular market</span>
 
-1. Endpoint URL: `/v1/orders/cancel_all`
+1. Endpoint URL: `/v1/cancelAllOrders`
 2. Method: `POST`
 3. Description: cancellation of all orders according to currency pair (Up to 2,000 cancellations).
 4. Request Parameter: see below
@@ -718,7 +719,7 @@ An overview of all the available API endpoints are listed as follows:
 ### <span id="new-order">List all open orders in a particular market</span>
 
 
-1. Endpoint URL: `/v1/open_orders`
+1. Endpoint URL: `/v1/openOrders`
 2. Method: `POST`
 3. Description: get the current pending orders
 4. Request Parameter: see below
@@ -805,7 +806,7 @@ An overview of all the available API endpoints are listed as follows:
 ---
 ### <span id="all-order">List all orders in a particular market</span>
 
-1. Endpoint URL: `/v1/all_orders`
+1. Endpoint URL: `/v1/allOrders`
 2. Method: `POST`
 3. Description: acquire full list of orders (including executed, pending, cancelled orders)
 
@@ -887,7 +888,7 @@ An overview of all the available API endpoints are listed as follows:
 ---
 ### <span id="all-trade">List all executed orders</span>
 
-1. Endpoint URL: `/v1/all_trades`
+1. Endpoint URL: `/v1/myTrades`
 2. Method: `POST`
 3. Description: get all records of executed orders
 4. Request Parameter: see below
