@@ -51,7 +51,7 @@ Welcome to the [Exchange](https://crypto.com/exchange) API documentation for dev
 
 The root URL for API access: https://api.crypto.com
 
-The root URL for WebSocket access https://ws.crypto.com
+The root URL for WebSocket access wss://ws.crypto.com
 
 All requests must be made via HTTPS protocol. For `POST` and `DELETE` requests, the `Content-Type` in the request must be `application/x-www-form-urlencoded`.
 
